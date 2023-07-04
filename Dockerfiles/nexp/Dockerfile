@@ -13,8 +13,10 @@ RUN wget --no-check-certificate https://storage.googleapis.com/downloads.webmpro
       cd .. && \
       rm -rf libwebp-1.0.0 libwebp-1.0.0.tar.gz
 
-RUN mkdir /usr/app && \
-    mkdir /usr/app/dist && \
-    chown -R node:node /usr/app && \
+RUN mkdir /home/node/app && \
+    mkdir /home/node/app/dist && \
+    chown -R node:node /home/node/app && \
     chown -R node:node /usr/local/lib/node_modules && \
     chown -R node:node /usr/local/bin
+
+RUN npm install -g pnpm pm2

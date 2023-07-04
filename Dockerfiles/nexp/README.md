@@ -2,5 +2,5 @@
 # Create new Dockerfile image
 
 ```bash
-docker build -t digichanges/nexp:1.0 .
+docker build -t digichanges/nexp:1.2 .
 ```
