@@ -1,0 +1,73 @@
+# Default values for nexp-api.
+environment: develop
+
+hostname: api.example.online
+
+certificate:
+  email: user@example.online
+
+# values.yaml
+env:
+  nodeEnv: "development"
+  app:
+    default: "FastifyBootstrapping"
+    path: "/home/node/app"
+    port: 8089
+    setAppProxy: false
+    setCookieSecure: false
+    setCookieSameSite: "Lax"
+    cors: "*"
+  database:
+    uri: "mongodb://experience:experience@db:27017/base"
+    host: "db"
+    user: "experience"
+    database: "experience"
+    password: "experience"
+    port: 5432
+    type: "postgresql"
+    ormDefault: "Mongoose"
+  cache:
+    host: "cache"
+    port: 6379
+    user: "experience"
+    password: "ewsua132435"
+    enable: false
+  minio:
+    host: "minio"
+    accessKey: "minio"
+    secretKey: 12345678
+    useSsl: false
+    port: 9000
+    publicBucket: "experience.public"
+    privateBucket: "experience.private"
+    rootPath: "data"
+    region: "us-east-1"
+    filesystemDefault: "minio"
+  tz: "UTC"
+  auth:
+    apiKey: "apiKey"
+    host: "https://my.supabase.co"
+    secret: false
+    authorization: false
+  jwt:
+    secret: "MyS3cReTsUp3Rk3Y!"
+    expires: 600
+    iss: "digichanges"
+    aud: "digichanges.com"
+  smtp:
+    host: "mail"
+    port: 1025
+    username:
+    password:
+    secureSsl: false
+    senderName: "Notifications"
+    senderEmailDefault: "notification@localhost.com"
+  url:
+    api: "http://localhost:8089/api"
+    web: "http://localhost:3000"
+  productName: "nodeexperience"
+  encryptionDefault: "bcrypt"
+  executeCrons: false
+  push:
+    publicKey: "BOemK1AULurSGe9gX_mkDWmj2-TZqI93-VhoqBw2im-W97hU6QqRQycSluY0sXWyFhv_mbY4XQh5ekvByxmrg4Q"
+    privateKey: "uNv3avCCOzZSqt16ASgHpcAD4Vqmkcx6oolxGvTOon4"

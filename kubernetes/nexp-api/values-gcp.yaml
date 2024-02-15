@@ -1,0 +1,59 @@
+# Default values for nexp-api.
+environment: development
+
+replicaCount: 2
+name: nexp-api
+hostname: example.com
+projectId: psyched-axle-405517
+namespace: default
+cloud: "gcp"
+
+image:
+  repository: digichanges/nexp-api
+  tag: latest
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  port: 8089
+  targetPort: 8089
+  type: NodePort
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "200Mi"
+  limits:
+    cpu: "200m"
+    memory: "300Mi"
+    ephemeral-storage: "100Mi"
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8089
+  initialDelaySeconds: 60
+  failureThreshold: 10
+  periodSeconds: 5
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8089
+  initialDelaySeconds: 60
+  failureThreshold: 10
+  periodSeconds: 5
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+ingress:
+  allowHttp: "true"
+
+certificate:
+  email: natanaelrusso18@hotmail.com

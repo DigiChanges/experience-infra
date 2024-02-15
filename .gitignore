@@ -1,2 +1,5 @@
 node_modules
 .idea
+dist/*
+values.override.yaml
+templates/*.json

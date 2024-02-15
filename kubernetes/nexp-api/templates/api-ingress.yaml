@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+{{- if eq .Values.cloud "minikube" }}
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}-ingress
+  annotations:
+    kubernetes.io/ingress.allow-http: "{{ .Values.ingress.allowHttp }}"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}-service
+            port:
+              number: 8089
+        path: /api
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: {{ .Values.name }}-service
+            port:
+              number: 8089
+        path: /
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: {{ .Values.name }}-service
+            port:
+              number: 8089
+        path: /api/*
+        pathType: ImplementationSpecific
+{{- else if eq .Values.cloud "gcp" }}
+metadata:
+  annotations:
+    kubernetes.io/spec.ingressClassName: gce
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.hostname }}
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: {{ .Values.name }}-service
+            port:
+              number: 8089
+        path: /
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: {{ .Values.name }}-service
+            port:
+              number: 8089
+        path: /api/*
+        pathType: ImplementationSpecific
+{{- end }}
+
