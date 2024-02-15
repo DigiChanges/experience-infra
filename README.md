@@ -1,12 +1,18 @@
 
 ## Dockerfile
 
-```bash
+Change version in every build
 
+```bash
+docker build --tag "digichanges/nexp:latest" --tag "digichanges/nexp:1.3" .
+```
+
+```bash
+docker push digichanges/nexp --all-tags
 ```
 ## Minikube
 
-Cuando se ejecute el helm chart se puede tener acceso al servicio de nexp-api con el siguiente comando: 
+When the helm chart is run you can access the nexp-api service with the following command: 
 
 ```bash
 minikube service nexp-api --url -n nexp-api
@@ -16,57 +22,54 @@ helm template mi-api-despliegue ./mi-api-chart
 
 ## Google Cloud Provider
 
-El helm chart te permite desplegar la aplicacion en GCP con Cloudflare como proveedor de DNS.
+The helm chart allows you to deploy the application on GCP with Cloudflare as the DNS provider.
 
 ### Primeros pasos
 
-#### Crear un Proyecto Nuevo en GCP
-1. Inicia Sesión en Google Cloud Console: Ve a Google Cloud Console. 
-2. Crear un Proyecto Nuevo: Haz clic en el menú de navegación en la esquina superior izquierda, selecciona "IAM & Admin" > "Manage Resources". Haz clic en "CREATE PROJECT". 
-3. Completa los Detalles del Proyecto: Ingresa un nombre para tu proyecto y selecciona una organización y una ubicación si es necesario. Haz clic en "CREATE".
+#### Create a New Project in GCP
+1. Sign in to Google Cloud Console: Go to Google Cloud Console.
+2. Create a New Project: Click the navigation menu in the upper-left corner, select "IAM & Admin" > "Manage Resources". Click "CREATE PROJECT".
+3. Complete Project Details: Enter a name for your project and select an organization and location if necessary. Click "CREATE."
 
+#### Create a Kubernetes Cluster
+1. Enable the Kubernetes Engine API: In the GCP console, go to "Kubernetes Engine" and enable the API if it is not active.
+2. Create a Cluster: In “Kubernetes Engine”, go to “Kubernetes Clusters” and click “Create Cluster”.
+3. Configure your Cluster: Choose your cluster configuration according to your needs (zone, machine size, number of nodes, etc.) and click "Create".
 
-#### Crear un Clúster de Kubernetes
-1. Habilita la API de Kubernetes Engine: En la consola de GCP, ve a "Kubernetes Engine" y habilita la API si no está activa. 
-2. Crear un Clúster: En "Kubernetes Engine", ve a "Clústeres de Kubernetes" y haz clic en "Crear clúster". 
-3. Configura tu Clúster: Elige la configuración de tu clúster según tus necesidades (zona, tamaño de máquina, número de nodos, etc.) y haz clic en "Crear".
+#### Create a Secret in Secret Manager
+1. Enable the Secret Manager API: Go to "API & Services" > "Dashboard" and enable the Secret Manager API if it is not active.
+2. Create a Secret: In "Security" > "Secret Manager", click "CREATE SECRET".
+3. Configure your Secret: Give your secret a name, add the secret value, and select the appropriate tags and permissions.
 
+#### Create a Service Account with External Secrets Administrator Permissions
+1. Create the Service Account: Go to "IAM & Admin" > "Service Accounts", and click on "CREATE SERVICE ACCOUNT".
+2. Service Account Details: Enter a name, description and click "CREATE".
+3. Assign Roles: In the roles section, assign the "External Secrets Administrator" role or the specific permissions you need.
+4. Create the Service Account Key: Once created, click on the service account and go to "Keys". Click "ADD KEY" and choose the key format.
 
-#### Crear un Secret en Secret Manager
-1. Habilita la API del Secret Manager: Ve a "API & Services" > "Dashboard" y habilita la API de Secret Manager si no está activa. 
-2. Crear un Secret: En "Security" > "Secret Manager", haz clic en "CREATE SECRET". 
-3. Configura tu Secret: Dale un nombre a tu secret, añade el valor del secret y selecciona las etiquetas y permisos adecuados. 
+You need to add the e helm repository and then install cert-manager
 
-#### Crear una Service Account con Permisos de Administrador de External Secrets
-1. Crear la Service Account: Ve a "IAM & Admin" > "Service Accounts", y haz clic en "CREATE SERVICE ACCOUNT". 
-2. Detalles de la Service Account: Ingresa un nombre, una descripción y haz clic en "CREATE". 
-3. Asignar Roles: En la sección de roles, asigna el rol de "Administrador de External Secrets" o los permisos específicos que necesites. 
-4. Crear la Llave de la Service Account: Una vez creada, haz clic en la cuenta de servicio y ve a "Keys". Haz clic en "ADD KEY" y elige el formato de la llave.
-
-
-Necesitas agregar el repositorio e helm y luego instalar cert-manager
-
-Primero necesitas instalar CustomResourceDefinitions
+First you need to install CustomResourceDefinitions
 
 ```bash
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.crds.yaml
 ```
 
-Luego debes agregar el chart de helm.
+Then you must add the helm chart.
 
 ```bash
 helm repo add jetstack https://charts.jetstack.io
 ```
 
-Finalmente lo instalas en el cluster.
+Finally you install it in the cluster.
 
 ```bash
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
 ```
 
-De esta manera se puede instalar en el namespace por defecto de `cert-manager`.
+This way it can be installed in the default `cert-manager` namespace.
 
-Tambien se tiene que instalar el external-secret 
+You also have to install the external-secret
 
 ```bash
 helm repo add external-secrets https://charts.external-secrets.io

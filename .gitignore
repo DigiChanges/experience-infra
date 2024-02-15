@@ -3,3 +3,4 @@ node_modules
 dist/*
 values.override.yaml
 templates/*.json
+gcp-credentials-external-secret.json
